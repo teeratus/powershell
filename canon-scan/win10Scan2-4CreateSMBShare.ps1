@@ -1,3 +1,4 @@
+#
 # --- Configurations ---
 $Username = "teeratus2"
 $FolderPath = "C:\scan-canon2"
