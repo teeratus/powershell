@@ -66,13 +66,16 @@ Set-ItemProperty -Path $msvPath -Name "NtlmMinServerSec" -Value 0 -Type DWord
 
 # -Password protected sharing
 # --Turn on password protected sharing
+#$guest = Get-LocalUser | Where-Object { $_.SID -like "*-501" }
+#net user $guest.Name /active:no
 #Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "LimitBlankPasswordUse" -Value 1 -Type DWord
 #Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "everyoneincludesanonymous" -Value 0 -Type DWord
 #Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "RestrictNullSessAccess" -Value 1 -Type DWord
-#Get-LocalUser | Where-Object { $_.SID -like "*-501" } | Disable-LocalUser -ErrorAction SilentlyContinue
 #
 # --Turn off password protected sharing
+$guest = Get-LocalUser | Where-Object { $_.SID -like "*-501" }
+net user $guest.Name ""
+net user $guest.Name /active:yes
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "LimitBlankPasswordUse" -Value 0 -Type DWord
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa" -Name "everyoneincludesanonymous" -Value 1 -Type DWord
 Set-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\LanmanServer\Parameters" -Name "RestrictNullSessAccess" -Value 0 -Type DWord
-Get-LocalUser | Where-Object { $_.SID -like "*-501" } | Enable-LocalUser -ErrorAction SilentlyContinue
